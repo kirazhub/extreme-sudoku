@@ -19,6 +19,8 @@ targets:
         CFBundleDisplayName: Sudoku
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
+        UIAppFonts:
+          - InstrumentSerif-Regular.ttf
     dependencies:
       - package: SudokuEngine
     settings:

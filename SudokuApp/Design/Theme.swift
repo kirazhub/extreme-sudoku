@@ -14,9 +14,10 @@ enum Theme {
         static let errorRed = Color("ErrorRed")
     }
 
-    /// Marka başlık fontu (Fraunces); bundle'da yoksa zarifçe sistem serif'e düşer.
+    /// Marka başlık fontu (Instrument Serif — zarif editöryel serif).
+    /// Bundle'da yoksa zarifçe sistem serif'e düşer.
     static func brand(_ size: CGFloat) -> Font {
-        Font.custom("Fraunces", size: size)
+        Font.custom("Instrument Serif", size: size)
     }
 
     /// Rakam fontu: yuvarlatılmış, tabular (rakamlar aynı genişlikte).

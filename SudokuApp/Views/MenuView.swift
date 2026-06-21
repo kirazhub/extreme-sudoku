@@ -15,7 +15,7 @@ struct MenuView: View {
                     Text("SUDOKU")
                         .font(Theme.brand(52))
                         .foregroundStyle(Theme.Palette.inkPrimary)
-                    Text("zihnini bilet")
+                    Text("saf mantık · sonsuz bulmaca")
                         .font(.system(size: 14, design: .rounded))
                         .foregroundStyle(Theme.Palette.accent)
                 }
