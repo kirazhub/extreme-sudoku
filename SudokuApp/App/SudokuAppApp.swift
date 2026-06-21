@@ -4,9 +4,13 @@ import SwiftUI
 struct SudokuAppApp: App {
     var body: some Scene {
         WindowGroup {
-            // Task 1: minimal placeholder; Task 2'de tema, Task 8'de MenuView gelecek.
-            Text("Sudoku")
-                .font(.largeTitle)
+            // Task 2: tema doğrulama; Task 8'de MenuView ile değiştirilecek.
+            ZStack {
+                Theme.Palette.boardBackground.ignoresSafeArea()
+                Text("Sudoku")
+                    .font(Theme.brand(48))
+                    .foregroundStyle(Theme.Palette.inkPrimary)
+            }
         }
     }
 }

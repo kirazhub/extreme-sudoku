@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0C27F25CD59972E2A8C7B899 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCE0D191152DB384C9C01F26 /* Theme.swift */; };
 		13574D43A8F42A458A42353B /* SudokuEngine in Frameworks */ = {isa = PBXBuildFile; productRef = 8EC595EFBBD29D3088575716 /* SudokuEngine */; };
 		B3DB981CA679A2D7A92DE3D0 /* SudokuEngine in Frameworks */ = {isa = PBXBuildFile; productRef = 307D8DC4C6BBE0C4EBD5E48B /* SudokuEngine */; };
 		C57853475E295C1DACCF1AB1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 93E5C43ACB6CC361A80A4E15 /* Assets.xcassets */; };
@@ -30,6 +31,7 @@
 		6F3686CFF4F42C9B86B44514 /* SudokuAppTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = SudokuAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		93E5C43ACB6CC361A80A4E15 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B7C9BA645F3BBEB5E82B1C4B /* SudokuEngine */ = {isa = PBXFileReference; lastKnownFileType = folder; name = SudokuEngine; path = SudokuEngine; sourceTree = SOURCE_ROOT; };
+		CCE0D191152DB384C9C01F26 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +59,7 @@
 			children = (
 				4225C0F125A108106196A59C /* Info.plist */,
 				C1ECBB26C6B739FEFF13C495 /* App */,
+				58D6DF53BE99A4C3B1EAA272 /* Design */,
 				6545DF4FFD091D11330ACB00 /* Resources */,
 			);
 			path = SudokuApp;
@@ -69,6 +72,14 @@
 				6F3686CFF4F42C9B86B44514 /* SudokuAppTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		58D6DF53BE99A4C3B1EAA272 /* Design */ = {
+			isa = PBXGroup;
+			children = (
+				CCE0D191152DB384C9C01F26 /* Theme.swift */,
+			);
+			path = Design;
 			sourceTree = "<group>";
 		};
 		6545DF4FFD091D11330ACB00 /* Resources */ = {
@@ -206,6 +217,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EE562A7D686294392F861DE7 /* SudokuAppApp.swift in Sources */,
+				0C27F25CD59972E2A8C7B899 /* Theme.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
