@@ -1,0 +1,12 @@
+{
+  "": {
+    "swift-dependencies": "/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEngine.build/primary.swiftdeps"
+  },
+  "/Users/kiraz/Downloads/sudodu/SudokuEngine/Sources/SudokuEngine/SudokuEngine.swift": {
+    "dependencies": "/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEngine.build/SudokuEngine.d",
+    "object": "/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEngine.build/SudokuEngine.swift.o",
+    "swiftmodule": "/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEngine.build/SudokuEngine~partial.swiftmodule",
+    "swift-dependencies": "/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEngine.build/SudokuEngine.swiftdeps",
+    "diagnostics": "/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEngine.build/SudokuEngine.dia"
+  }
+}

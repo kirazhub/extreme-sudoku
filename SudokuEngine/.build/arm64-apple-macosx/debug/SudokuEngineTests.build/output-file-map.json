@@ -1,0 +1,12 @@
+{
+  "": {
+    "swift-dependencies": "/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEngineTests.build/primary.swiftdeps"
+  },
+  "/Users/kiraz/Downloads/sudodu/SudokuEngine/Tests/SudokuEngineTests/SmokeTests.swift": {
+    "dependencies": "/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEngineTests.build/SmokeTests.d",
+    "object": "/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEngineTests.build/SmokeTests.swift.o",
+    "swiftmodule": "/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEngineTests.build/SmokeTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEngineTests.build/SmokeTests.swiftdeps",
+    "diagnostics": "/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEngineTests.build/SmokeTests.dia"
+  }
+}

@@ -1,0 +1,112 @@
+client:
+  name: basic
+  file-system: device-agnostic
+tools: {}
+targets:
+  "PackageStructure": ["<PackageStructure>"]
+  "SudokuEngine-arm64-apple-macosx-debug.module": ["<SudokuEngine-arm64-apple-macosx-debug.module>"]
+  "SudokuEnginePackageTests-arm64-apple-macosx-debug.module": ["<SudokuEnginePackageTests-arm64-apple-macosx-debug.module>"]
+  "SudokuEnginePackageTests-arm64-apple-macosx-debug.test": ["<SudokuEnginePackageTests-arm64-apple-macosx-debug.test>"]
+  "SudokuEngineTests-arm64-apple-macosx-debug.module": ["<SudokuEngineTests-arm64-apple-macosx-debug.module>"]
+  "main": ["<SudokuEngine-arm64-apple-macosx-debug.module>"]
+  "test": ["<SudokuEngine-arm64-apple-macosx-debug.module>","<SudokuEnginePackageTests-arm64-apple-macosx-debug.test>","<SudokuEngineTests-arm64-apple-macosx-debug.module>"]
+default: "main"
+nodes:
+  "/Users/kiraz/Downloads/sudodu/SudokuEngine/Sources/SudokuEngine/":
+    is-directory-structure: true
+    content-exclusion-patterns: [".git",".build"]
+  "/Users/kiraz/Downloads/sudodu/SudokuEngine/Tests/SudokuEngineTests/":
+    is-directory-structure: true
+    content-exclusion-patterns: [".git",".build"]
+commands:
+  "/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEngine.build/sources":
+    tool: write-auxiliary-file
+    inputs: ["<sources-file-list>","/Users/kiraz/Downloads/sudodu/SudokuEngine/Sources/SudokuEngine/SudokuEngine.swift"]
+    outputs: ["/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEngine.build/sources"]
+    description: "Write auxiliary file /Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEngine.build/sources"
+
+  "/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEnginePackageTests.build/sources":
+    tool: write-auxiliary-file
+    inputs: ["<sources-file-list>","/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEnginePackageTests.derived/runner.swift"]
+    outputs: ["/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEnginePackageTests.build/sources"]
+    description: "Write auxiliary file /Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEnginePackageTests.build/sources"
+
+  "/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEnginePackageTests.derived/runner.swift":
+    tool: test-entry-point-tool
+    inputs: []
+    outputs: ["/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEnginePackageTests.derived/runner.swift"]
+
+  "/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEnginePackageTests.product/Objects.LinkFileList":
+    tool: write-auxiliary-file
+    inputs: ["<link-file-list>","/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEngine.build/SudokuEngine.swift.o","/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEnginePackageTests.build/runner.swift.o","/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEngineTests.build/SmokeTests.swift.o"]
+    outputs: ["/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEnginePackageTests.product/Objects.LinkFileList"]
+    description: "Write auxiliary file /Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEnginePackageTests.product/Objects.LinkFileList"
+
+  "/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEngineTests.build/sources":
+    tool: write-auxiliary-file
+    inputs: ["<sources-file-list>","/Users/kiraz/Downloads/sudodu/SudokuEngine/Tests/SudokuEngineTests/SmokeTests.swift"]
+    outputs: ["/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEngineTests.build/sources"]
+    description: "Write auxiliary file /Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEngineTests.build/sources"
+
+  "/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt":
+    tool: write-auxiliary-file
+    inputs: ["<swift-get-version>","/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"]
+    outputs: ["/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"]
+    always-out-of-date: "true"
+    description: "Write auxiliary file /Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+
+  "<SudokuEngine-arm64-apple-macosx-debug.module>":
+    tool: phony
+    inputs: ["/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEngine.build/SudokuEngine.swift.o","/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/Modules/SudokuEngine.swiftmodule"]
+    outputs: ["<SudokuEngine-arm64-apple-macosx-debug.module>"]
+
+  "<SudokuEnginePackageTests-arm64-apple-macosx-debug.module>":
+    tool: phony
+    inputs: ["/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEnginePackageTests.build/runner.swift.o","/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/Modules/SudokuEnginePackageTests.swiftmodule"]
+    outputs: ["<SudokuEnginePackageTests-arm64-apple-macosx-debug.module>"]
+
+  "<SudokuEnginePackageTests-arm64-apple-macosx-debug.test>":
+    tool: phony
+    inputs: ["/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEnginePackageTests.xctest/Contents/MacOS/SudokuEnginePackageTests"]
+    outputs: ["<SudokuEnginePackageTests-arm64-apple-macosx-debug.test>"]
+
+  "<SudokuEngineTests-arm64-apple-macosx-debug.module>":
+    tool: phony
+    inputs: ["/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEngineTests.build/SmokeTests.swift.o","/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/Modules/SudokuEngineTests.swiftmodule"]
+    outputs: ["<SudokuEngineTests-arm64-apple-macosx-debug.module>"]
+
+  "C.SudokuEngine-arm64-apple-macosx-debug.module":
+    tool: shell
+    inputs: ["/Users/kiraz/Downloads/sudodu/SudokuEngine/Sources/SudokuEngine/SudokuEngine.swift","/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt","/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEngine.build/sources"]
+    outputs: ["/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEngine.build/SudokuEngine.swift.o","/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/Modules/SudokuEngine.swiftmodule"]
+    description: "Compiling Swift Module 'SudokuEngine' (1 sources)"
+    args: ["/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc","-module-name","SudokuEngine","-emit-dependencies","-emit-module","-emit-module-path","/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/Modules/SudokuEngine.swiftmodule","-output-file-map","/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEngine.build/output-file-map.json","-parse-as-library","-incremental","-c","@/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEngine.build/sources","-I","/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/Modules","-target","arm64-apple-macosx10.13","-incremental","-enable-batch-mode","-serialize-diagnostics","-index-store-path","/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/index/store","-Onone","-enable-testing","-j10","-DSWIFT_PACKAGE","-DDEBUG","-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE","-module-cache-path","/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/ModuleCache","-parseable-output","-parse-as-library","-emit-objc-header","-emit-objc-header-path","/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEngine.build/include/SudokuEngine-Swift.h","-swift-version","6","-plugin-path","/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing","-sdk","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk","-F","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks","-I","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib","-L","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib","-g","-Xcc","-isysroot","-Xcc","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk","-Xcc","-F","-Xcc","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks","-Xcc","-fPIC","-Xcc","-g","-package-name","sudokuengine"]
+
+  "C.SudokuEnginePackageTests-arm64-apple-macosx-debug.module":
+    tool: shell
+    inputs: ["/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEnginePackageTests.derived/runner.swift","/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt","/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/Modules/SudokuEngineTests.swiftmodule","/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEnginePackageTests.build/sources"]
+    outputs: ["/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEnginePackageTests.build/runner.swift.o","/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/Modules/SudokuEnginePackageTests.swiftmodule"]
+    description: "Compiling Swift Module 'SudokuEnginePackageTests' (1 sources)"
+    args: ["/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc","-module-name","SudokuEnginePackageTests","-emit-dependencies","-emit-module","-emit-module-path","/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/Modules/SudokuEnginePackageTests.swiftmodule","-output-file-map","/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEnginePackageTests.build/output-file-map.json","-parse-as-library","-incremental","-c","@/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEnginePackageTests.build/sources","-I","/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/Modules","-target","arm64-apple-macosx10.13","-incremental","-enable-batch-mode","-serialize-diagnostics","-index-store-path","/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/index/store","-Onone","-enable-testing","-Xfrontend","-enable-cross-import-overlays","-j10","-DSWIFT_PACKAGE","-DDEBUG","-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE","-module-cache-path","/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/ModuleCache","-parseable-output","-parse-as-library","-emit-objc-header","-emit-objc-header-path","/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEnginePackageTests.build/include/SudokuEnginePackageTests-Swift.h","-plugin-path","/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing","-sdk","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk","-F","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks","-I","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib","-L","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib","-g","-Xcc","-isysroot","-Xcc","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk","-Xcc","-F","-Xcc","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks","-Xcc","-fPIC","-Xcc","-g","-package-name","sudokuengine"]
+
+  "C.SudokuEnginePackageTests-arm64-apple-macosx-debug.test":
+    tool: shell
+    inputs: ["/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEngine.build/SudokuEngine.swift.o","/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEnginePackageTests.build/runner.swift.o","/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEngineTests.build/SmokeTests.swift.o","/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEnginePackageTests.product/Objects.LinkFileList"]
+    outputs: ["/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEnginePackageTests.xctest/Contents/MacOS/SudokuEnginePackageTests"]
+    description: "Linking ./.build/arm64-apple-macosx/debug/SudokuEnginePackageTests.xctest/Contents/MacOS/SudokuEnginePackageTests"
+    args: ["/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc","-L","/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug","-o","/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEnginePackageTests.xctest/Contents/MacOS/SudokuEnginePackageTests","-module-name","SudokuEnginePackageTests","-Xlinker","-no_warn_duplicate_libraries","-Xlinker","-bundle","-Xlinker","-rpath","-Xlinker","@loader_path/../../../","@/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEnginePackageTests.product/Objects.LinkFileList","-Xlinker","-rpath","-Xlinker","/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-6.2/macosx","-target","arm64-apple-macosx14.0","-Xlinker","-add_ast_path","-Xlinker","/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/Modules/SudokuEngine.swiftmodule","-Xlinker","-add_ast_path","-Xlinker","/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/Modules/SudokuEnginePackageTests.swiftmodule","-Xlinker","-add_ast_path","-Xlinker","/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/Modules/SudokuEngineTests.swiftmodule","-plugin-path","/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing","-sdk","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk","-F","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks","-I","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib","-L","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib","-g"]
+
+  "C.SudokuEngineTests-arm64-apple-macosx-debug.module":
+    tool: shell
+    inputs: ["/Users/kiraz/Downloads/sudodu/SudokuEngine/Tests/SudokuEngineTests/SmokeTests.swift","/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt","/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/Modules/SudokuEngine.swiftmodule","/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEngineTests.build/sources"]
+    outputs: ["/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEngineTests.build/SmokeTests.swift.o","/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/Modules/SudokuEngineTests.swiftmodule"]
+    description: "Compiling Swift Module 'SudokuEngineTests' (1 sources)"
+    args: ["/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc","-module-name","SudokuEngineTests","-emit-dependencies","-emit-module","-emit-module-path","/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/Modules/SudokuEngineTests.swiftmodule","-output-file-map","/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEngineTests.build/output-file-map.json","-parse-as-library","-incremental","-c","@/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/SudokuEngineTests.build/sources","-I","/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/Modules","-target","arm64-apple-macosx14.0","-incremental","-enable-batch-mode","-serialize-diagnostics","-index-store-path","/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/index/store","-Onone","-enable-testing","-Xfrontend","-enable-cross-import-overlays","-j10","-DSWIFT_PACKAGE","-DDEBUG","-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE","-module-cache-path","/Users/kiraz/Downloads/sudodu/SudokuEngine/.build/arm64-apple-macosx/debug/ModuleCache","-parseable-output","-parse-as-library","-swift-version","6","-plugin-path","/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing","-sdk","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk","-F","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks","-I","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib","-L","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib","-g","-Xcc","-isysroot","-Xcc","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk","-Xcc","-F","-Xcc","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks","-Xcc","-fPIC","-Xcc","-g","-package-name","sudokuengine"]
+
+  "PackageStructure":
+    tool: package-structure-tool
+    inputs: ["/Users/kiraz/Downloads/sudodu/SudokuEngine/Sources/SudokuEngine/","/Users/kiraz/Downloads/sudodu/SudokuEngine/Tests/SudokuEngineTests/","/Users/kiraz/Downloads/sudodu/SudokuEngine/Package.swift","/Users/kiraz/Downloads/sudodu/SudokuEngine/Package.resolved"]
+    outputs: ["<PackageStructure>"]
+    description: "Planning build"
+    allow-missing-inputs: true
+
