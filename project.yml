@@ -35,3 +35,6 @@ targets:
     dependencies:
       - target: SudokuApp
       - package: SudokuEngine
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES

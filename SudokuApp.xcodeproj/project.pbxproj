@@ -10,6 +10,8 @@
 		0C27F25CD59972E2A8C7B899 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCE0D191152DB384C9C01F26 /* Theme.swift */; };
 		13574D43A8F42A458A42353B /* SudokuEngine in Frameworks */ = {isa = PBXBuildFile; productRef = 8EC595EFBBD29D3088575716 /* SudokuEngine */; };
 		B3DB981CA679A2D7A92DE3D0 /* SudokuEngine in Frameworks */ = {isa = PBXBuildFile; productRef = 307D8DC4C6BBE0C4EBD5E48B /* SudokuEngine */; };
+		B5018CD322CAFD376EC1D12E /* GameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A50433EEA16D313927A89F /* GameViewModel.swift */; };
+		C3C0BA060841EC02AC402961 /* GameViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720CC59452DBD42D3DBEAEED /* GameViewModelTests.swift */; };
 		C57853475E295C1DACCF1AB1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 93E5C43ACB6CC361A80A4E15 /* Assets.xcassets */; };
 		EE562A7D686294392F861DE7 /* SudokuAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C5AE3486BEFFC30C42142C3 /* SudokuAppApp.swift */; };
 /* End PBXBuildFile section */
@@ -28,7 +30,9 @@
 		0C5AE3486BEFFC30C42142C3 /* SudokuAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SudokuAppApp.swift; sourceTree = "<group>"; };
 		273079D6403BD86696471034 /* SudokuApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = SudokuApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4225C0F125A108106196A59C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		59A50433EEA16D313927A89F /* GameViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewModel.swift; sourceTree = "<group>"; };
 		6F3686CFF4F42C9B86B44514 /* SudokuAppTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = SudokuAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		720CC59452DBD42D3DBEAEED /* GameViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewModelTests.swift; sourceTree = "<group>"; };
 		93E5C43ACB6CC361A80A4E15 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B7C9BA645F3BBEB5E82B1C4B /* SudokuEngine */ = {isa = PBXFileReference; lastKnownFileType = folder; name = SudokuEngine; path = SudokuEngine; sourceTree = SOURCE_ROOT; };
 		CCE0D191152DB384C9C01F26 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
@@ -60,6 +64,7 @@
 				4225C0F125A108106196A59C /* Info.plist */,
 				C1ECBB26C6B739FEFF13C495 /* App */,
 				58D6DF53BE99A4C3B1EAA272 /* Design */,
+				791D73F27560227538CAB3A7 /* Model */,
 				6545DF4FFD091D11330ACB00 /* Resources */,
 			);
 			path = SudokuApp;
@@ -88,6 +93,14 @@
 				93E5C43ACB6CC361A80A4E15 /* Assets.xcassets */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		791D73F27560227538CAB3A7 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				59A50433EEA16D313927A89F /* GameViewModel.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		874CBA77911BFC13025B3E36 /* Packages */ = {
@@ -119,6 +132,7 @@
 		D1FDA535911F53D32C27E247 /* SudokuAppTests */ = {
 			isa = PBXGroup;
 			children = (
+				720CC59452DBD42D3DBEAEED /* GameViewModelTests.swift */,
 			);
 			path = SudokuAppTests;
 			sourceTree = "<group>";
@@ -216,6 +230,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B5018CD322CAFD376EC1D12E /* GameViewModel.swift in Sources */,
 				EE562A7D686294392F861DE7 /* SudokuAppApp.swift in Sources */,
 				0C27F25CD59972E2A8C7B899 /* Theme.swift in Sources */,
 			);
@@ -225,6 +240,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C3C0BA060841EC02AC402961 /* GameViewModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -243,6 +259,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -259,6 +276,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
