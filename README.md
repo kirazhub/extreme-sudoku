@@ -1,36 +1,100 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🧩 Extreme Sudoku
 
-## Getting Started
+Mobil-öncelikli, modern bir web Sudoku oyunu — **4×4'ten 16×16'ya** kadar tahta boyutları, insan tekniklerine dayalı akıllı ipuçları ve _İmkânsız_ seviyeye kadar 5 farklı zorluk. Tamamen TypeScript ile yazılmış, tek çözüm garantili bir motor üzerinde çalışır.
 
-First, run the development server:
+![Kurulum ekranı](docs/superpowers/web-setup.png)
+
+---
+
+## ✨ Özellikler
+
+### 🎮 Oyun
+- **4 tahta boyutu:** 4×4, 6×6, 9×9, 16×16
+- **5 zorluk seviyesi:** Kolay · Orta · Zor · Extreme · İmkânsız
+- **İpucu yoğunluğu ayarı** — başlangıçta açık hücre sayısını kontrol et
+- **Günlük bulmaca** — deterministik seed sayesinde herkese aynı bulmaca
+
+### 🧠 Yardımcılar
+- **Akıllı ipucu** — insan çözüm teknikleriyle: Tek Aday, Gizli Tek, Çıplak İkili, X-Kanat ve daha fazlası
+- **Not modu** — hücrelere aday rakam notları al
+- **Hata gösterme** — yanlış girişleri anında işaretle
+- **Aynı rakam vurgulama** — seçili rakamı tüm tahtada öne çıkar
+- **Geri al** & **Duraklat**
+
+### 📊 Deneyim
+- **Yerel skorboard** — `localStorage` üzerinde en iyi süreler
+- **Konfeti tamamlama efekti** 🎉
+- **Haptik titreşim** — dokunsal geri bildirim
+- **Açık / Koyu tema**
+
+![Oyun ekranı](docs/superpowers/web-game.png)
+
+---
+
+## 🛠️ Teknoloji Yığını
+
+| Katman | Teknoloji |
+|--------|-----------|
+| Framework | **Next.js 16** (App Router) |
+| UI | **React 19** |
+| Dil | **TypeScript 5** |
+| Stil | **Tailwind CSS v4** |
+| Efekt | **canvas-confetti** |
+| Test | **Vitest** (110+ test) |
+| Dağıtım | **Vercel** |
+
+---
+
+## 🚀 Kurulum & Çalıştırma
 
 ```bash
+# Bağımlılıkları yükle
+npm install
+
+# Geliştirme sunucusu (http://localhost:3000)
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# Üretim derlemesi
+npm run build
+
+# Testleri çalıştır
+npm test
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📁 Proje Yapısı
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+sudodu/
+├── app/              # Next.js App Router (sayfalar, layout, ikonlar)
+├── components/       # React arayüz bileşenleri (BoardView, NumberPad, Toolbar…)
+└── lib/
+    ├── engine/       # Saf TypeScript Sudoku motoru (üretici, çözücü, ipucu)
+    └── game/         # Oyun durumu, skorboard, haptik, semboller
+```
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## ⚙️ Oyun Motoru
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+`lib/engine`, herhangi bir UI'a bağımlı olmayan **saf TypeScript** bir motordur:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Boyut-agnostik** — aynı kod 4×4'ten 16×16'ya kadar tüm tahtaları üretir ve çözer.
+- **Tek çözüm garantili** — her bulmacanın yalnızca bir geçerli çözümü olduğu doğrulanır.
+- **Teknik-tabanlı zorluk** — zorluk, gereken çözüm tekniklerinin karmaşıklığına göre ölçülür; tahmine değil mantığa dayanır.
+- **Deterministik** — seed tabanlı RNG, tekrarlanabilir bulmacalar (günlük bulmaca) sağlar.
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## ☁️ Vercel'e Dağıtım
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Projeyi bir **GitHub** deposuna gönder (`git push`).
+2. [vercel.com](https://vercel.com) üzerinden depoyu **Import** et.
+3. Vercel, Next.js'i otomatik algılar — ek yapılandırma gerekmez. 🚀
+
+---
+
+## 📄 Lisans
+
+[MIT](LICENSE) lisansı altında dağıtılır.
