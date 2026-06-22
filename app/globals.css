@@ -1,26 +1,62 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/*
+ * Tailwind v4 — CSS-first tema.
+ * Renkler ve fontlar @theme icinde tanimli; bu sayede bg-bg, text-ink gibi
+ * siniflar otomatik uretilir. Koyu mod .dark sinifi ile devreye girer.
+ */
+
+@theme {
+  /* Acik mod renkleri (varsayilan) */
+  --color-bg: #FBF8F1;
+  --color-surface: #FFFFFF;
+  --color-ink: #23272E;
+  --color-ink-soft: #6B6A66;
+  --color-ink-user: #2E6E8E;
+  --color-accent: #F0502E;
+  --color-accent-soft: #FBE3D6;
+  --color-grid-thin: #E6DFD0;
+  --color-grid-thick: #BCB199;
+  --color-cell-peer: #F4EFE2;
+
+  /* Fontlar: layout.tsx next/font/google ile degisken atar */
+  --font-display: var(--font-fraunces);
+  --font-sans: var(--font-outfit);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Koyu mod — .dark sinifi html elemaninda ise devreye girer */
+.dark {
+  --color-bg: #14161A;
+  --color-surface: #1C1F25;
+  --color-ink: #ECE8DE;
+  --color-ink-soft: #9B9A93;
+  --color-ink-user: #7FB6D4;
+  --color-accent: #FF6A4D;
+  --color-accent-soft: #3A2A22;
+  --color-grid-thin: #2A2E36;
+  --color-grid-thick: #454C58;
+  --color-cell-peer: #23262D;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html,
+body {
+  height: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+  font-feature-settings: "tnum" 1, "cv11" 1;
+}
+
+/* Rakamlar her zaman tabular (esit genislikte). */
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Dokunma alanlarini buyut: minimum 44px. */
+button {
+  touch-action: manipulation;
 }
