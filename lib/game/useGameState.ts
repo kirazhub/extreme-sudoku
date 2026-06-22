@@ -13,6 +13,11 @@ import {
   type Hint,
   type Puzzle,
 } from "@/lib/engine";
+import {
+  clearSavedGame,
+  saveGame,
+  type SavedGame,
+} from "@/lib/game/savedGame";
 
 /** Saf yardimci: verilen indeks "given" mi? (givens'ta sifirdan farkliysa kilitli) */
 export function isGiven(puzzle: Puzzle, index: number): boolean {
@@ -125,20 +130,59 @@ export interface UseGameState {
   undo: () => void;
 }
 
+/** useGameState opsiyonlari. */
+export interface UseGameStateOptions {
+  /**
+   * Kaydedilmis yarim oyundan geri yukleme.
+   * Verildiyse board/notes/elapsedSeconds/hintsUsed/selectedIndex bu degerlerle baslar.
+   * Puzzle'in givens/solution/config'i restore'a uymali (cagiran sorumlu).
+   */
+  restore?: SavedGame | null;
+  /**
+   * Gunluk bulmaca mi? saveGame icine yazilir ki "Devam Et"te dogru flag korunsun.
+   */
+  isDaily?: boolean;
+}
+
 /**
  * Oyun durumunu yoneten ana hook.
  * @param puzzle Onceden uretilmis bulmaca (newPuzzle ile).
+ * @param options Opsiyonel: restore (kayittan baslat) + isDaily (kaydetmek icin bayrak).
  */
-export function useGameState(puzzle: Puzzle): UseGameState {
-  // Tahta = givens'in kopyasi. Bulmaca degisirse sifirla.
-  const [board, setBoard] = useState<number[]>(() => puzzle.givens.slice());
-  const [notesMap, setNotesMap] = useState<Record<number, number[]>>({});
-  const [selectedIndex, setSelectedIndex] = useState<number>(-1);
-  const [elapsedSeconds, setElapsedSeconds] = useState<number>(0);
+export function useGameState(
+  puzzle: Puzzle,
+  options?: UseGameStateOptions
+): UseGameState {
+  const restore = options?.restore ?? null;
+  const isDaily = options?.isDaily ?? false;
+
+  // Tahta = givens'in kopyasi, ya da restore varsa kaydedilmis tahta.
+  // Lazy initializer ile mount aninda bir kez calisir (SSR guvenli).
+  const [board, setBoard] = useState<number[]>(() =>
+    restore ? restore.board.slice() : puzzle.givens.slice()
+  );
+  const [notesMap, setNotesMap] = useState<Record<number, number[]>>(() => {
+    if (!restore) return {};
+    // Notlari kopyala (immutable referans).
+    const copy: Record<number, number[]> = {};
+    for (const [k, v] of Object.entries(restore.notes)) {
+      copy[Number(k)] = v.slice();
+    }
+    return copy;
+  });
+  const [selectedIndex, setSelectedIndex] = useState<number>(() => {
+    if (!restore) return -1;
+    return restore.selectedIndex ?? -1;
+  });
+  const [elapsedSeconds, setElapsedSeconds] = useState<number>(() =>
+    restore ? restore.elapsedSeconds : 0
+  );
   const [isPaused, setIsPaused] = useState<boolean>(false);
   const [noteMode, setNoteMode] = useState<boolean>(false);
   const [showErrors, setShowErrors] = useState<boolean>(true);
-  const [hintsUsed, setHintsUsed] = useState<number>(0);
+  const [hintsUsed, setHintsUsed] = useState<number>(() =>
+    restore ? restore.hintsUsed : 0
+  );
   const [lastHint, setLastHint] = useState<Hint | null>(null);
   // Undo stack — ref + state degil cunku boyut UI'da gosterilmiyor, sadece canUndo.
   const undoStack = useRef<Move[]>([]);
@@ -176,6 +220,101 @@ export function useGameState(puzzle: Puzzle): UseGameState {
     }, 1000);
     return () => clearInterval(id);
   }, [isPaused, solved]);
+
+  // ---------- Otomatik kaydetme ----------
+  // Strateji: board/notesMap degisiminde (insan eylemi sonrasi) durumu yaz.
+  // Ek olarak sayfa gizlenince/kapanirken o anki elapsedSeconds ile bir kez daha yaz —
+  // yoksa kullanici sekmeyi kapatirsa son N saniye kaybolur.
+  //
+  // Cozulunce: kayit silinir (yarim oyun kalmasin) — bunu ayri bir effect yapiyor.
+
+  // En guncel degerleri ref'lerde tut ki event listener'lar her zaman tazesini gorsun.
+  const stateRef = useRef({
+    board,
+    notesMap,
+    elapsedSeconds,
+    hintsUsed,
+    selectedIndex,
+    solved,
+    isDaily,
+  });
+  useEffect(() => {
+    stateRef.current = {
+      board,
+      notesMap,
+      elapsedSeconds,
+      hintsUsed,
+      selectedIndex,
+      solved,
+      isDaily,
+    };
+  }, [board, notesMap, elapsedSeconds, hintsUsed, selectedIndex, solved, isDaily]);
+
+  // Anlik durumu kaydet — saf yardimci (effect'ler ve listener'lar buradan cagirir).
+  const persistNow = useCallback(() => {
+    const p = puzzleRef.current;
+    const st = stateRef.current;
+    // Cozulduyse hic yazma (clearSavedGame ayri effect'te yapar).
+    if (st.solved) return;
+    const payload: SavedGame = {
+      size: p.config.size,
+      difficulty: p.difficulty,
+      isDaily: st.isDaily,
+      givens: p.givens.slice(),
+      solution: p.solution.slice(),
+      board: st.board.slice(),
+      notes: (() => {
+        const copy: Record<number, number[]> = {};
+        for (const [k, v] of Object.entries(st.notesMap)) {
+          copy[Number(k)] = v.slice();
+        }
+        return copy;
+      })(),
+      elapsedSeconds: st.elapsedSeconds,
+      hintsUsed: st.hintsUsed,
+      selectedIndex: st.selectedIndex >= 0 ? st.selectedIndex : null,
+      savedAt: Date.now(),
+    };
+    saveGame(payload);
+  }, []);
+
+  // board/notes/hintsUsed/selectedIndex degisince yaz (her saniye degil; "etkinlik" anlarinda).
+  useEffect(() => {
+    // Cozulduyse skip — clear ayri effect'te.
+    if (solved) return;
+    persistNow();
+  }, [board, notesMap, hintsUsed, selectedIndex, persistNow, solved]);
+
+  // Sayfa gizlenince / kapatilirken son durumu (ozellikle elapsedSeconds) yaz.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const onHide = () => {
+      // visibilitychange'te document.hidden true geldiyse yaz.
+      if (document.visibilityState === "hidden") {
+        persistNow();
+      }
+    };
+    const onPageHide = () => persistNow();
+    const onBeforeUnload = () => persistNow();
+
+    document.addEventListener("visibilitychange", onHide);
+    window.addEventListener("pagehide", onPageHide);
+    window.addEventListener("beforeunload", onBeforeUnload);
+    return () => {
+      document.removeEventListener("visibilitychange", onHide);
+      window.removeEventListener("pagehide", onPageHide);
+      window.removeEventListener("beforeunload", onBeforeUnload);
+    };
+  }, [persistNow]);
+
+  // Cozulunce kaydi sil — yarim oyun kalmasin.
+  useEffect(() => {
+    if (solved) {
+      clearSavedGame();
+    }
+  }, [solved]);
+
+  // ---------- Otomatik kaydetme sonu ----------
 
   // Undo stack'a hamle ekle.
   const pushMove = useCallback((m: Move) => {

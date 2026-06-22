@@ -1,7 +1,8 @@
 "use client";
 
-// Baslangic ekrani: Gunluk bulmaca + zorluk + tahta boyutu + ipucu yogunlugu + BASLA.
+// Baslangic ekrani: (varsa) Devam Et + Gunluk bulmaca + zorluk + tahta boyutu + ipucu yogunlugu + BASLA.
 // Saf gosterim; veri yonetimi yok, kullaniciya degerleri secip "onStart" tetikler.
+// "Devam Et" kayit varsa en ustte gosterilir ve onResume() cagirir.
 
 import { useState } from "react";
 import type { Difficulty } from "@/lib/engine";
@@ -12,6 +13,8 @@ import {
   loadDailyState,
   type DailyState,
 } from "@/lib/game/daily";
+import { loadSavedGame, type SavedGame } from "@/lib/game/savedGame";
+import { formatTime } from "@/lib/game/useGameState";
 
 export interface SetupChoice {
   size: number;
@@ -24,6 +27,13 @@ export interface SetupChoice {
 export interface SetupScreenProps {
   onStart: (choice: SetupChoice) => void;
   onShowScoreboard: () => void;
+  /**
+   * Kayitli yarim oyun varsa kullanicinin "Devam Et" karti.
+   * Verildiyse ekranin en ustunde gosterilir.
+   */
+  onResume?: () => void;
+  /** Kayitli yarim oyun ozet bilgisi — kartta gosterilir. */
+  savedGame?: SavedGame | null;
 }
 
 const DIFFICULTIES: Difficulty[] = [
@@ -40,7 +50,12 @@ const SIZES = [4, 6, 9, 16];
 const DAILY_SIZE = 9;
 const DAILY_DIFFICULTY: Difficulty = "hard";
 
-export function SetupScreen({ onStart, onShowScoreboard }: SetupScreenProps) {
+export function SetupScreen({
+  onStart,
+  onShowScoreboard,
+  onResume,
+  savedGame,
+}: SetupScreenProps) {
   const [difficulty, setDifficulty] = useState<Difficulty>("medium");
   const [size, setSize] = useState<number>(9);
   // -10..+15: sol -> daha az ipucu (zor), sag -> daha cok ipucu (kolay).
@@ -54,6 +69,14 @@ export function SetupScreen({ onStart, onShowScoreboard }: SetupScreenProps) {
   // deger gelir. useEffect+setState pattern'i yerine bu yontem kullaniyoruz
   // ki React 19'un set-state-in-effect kuralina takilmayalim.
   const [daily] = useState<DailyState | null>(() => loadDailyState());
+
+  // Yarim oyun: prop olarak gelirse onu kullan; yoksa lazy initial ile oku.
+  // (page.tsx zaten verecek ama prop opsiyonel oldugundan fallback yapiyoruz.)
+  const [localSaved] = useState<SavedGame | null>(() =>
+    savedGame !== undefined ? savedGame : loadSavedGame()
+  );
+  const saved = savedGame !== undefined ? savedGame : localSaved;
+  const hasSaved = !!saved && !!onResume;
 
   const dailyDone = isCompletedToday(daily);
   const streak = daily?.streak ?? 0;
@@ -106,6 +129,45 @@ export function SetupScreen({ onStart, onShowScoreboard }: SetupScreenProps) {
           </button>
         </div>
       </header>
+
+      {/* DEVAM ET karti — yalnizca kayitli yarim oyun varsa en ustte */}
+      {hasSaved && saved && (
+        <section>
+          <button
+            type="button"
+            onClick={onResume}
+            className="group w-full rounded-2xl border-2 border-accent bg-accent text-white p-4 text-left shadow-md transition-transform active:scale-[0.99]"
+            aria-label="Yarım oyuna devam et"
+          >
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="text-3xl">▶</div>
+                <div>
+                  <div
+                    className="font-display text-xl font-semibold leading-tight"
+                    style={{ fontFamily: "var(--font-display), serif" }}
+                  >
+                    Devam Et
+                  </div>
+                  <div className="tnum text-xs opacity-90 mt-0.5">
+                    {saved.size}×{saved.size} · {displayNameTR(saved.difficulty)} ·{" "}
+                    {formatTime(saved.elapsedSeconds)}
+                  </div>
+                </div>
+              </div>
+              <div className="font-semibold">›</div>
+            </div>
+
+            {saved.isDaily && (
+              <div className="mt-3 flex flex-wrap items-center gap-2 text-sm">
+                <span className="rounded-full bg-white/15 px-2.5 py-1 font-medium">
+                  🗓️ Günlük
+                </span>
+              </div>
+            )}
+          </button>
+        </section>
+      )}
 
       {/* Gunluk bulmaca karti — tum kart tek bir buton */}
       <section>

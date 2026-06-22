@@ -23,11 +23,14 @@ import {
   loadDailyState,
   saveDailyState,
 } from "@/lib/game/daily";
+import type { SavedGame } from "@/lib/game/savedGame";
 
 export interface GameScreenProps {
   puzzle: Puzzle;
   /** Gunluk bulmaca mi? Tamamlamada seri (streak) guncellenir. */
   isDaily?: boolean;
+  /** Verildiyse kayitli yarim oyundan baslar (board/notes/sure/ipucu). */
+  restore?: SavedGame | null;
   onExit: () => void;
   onPlayAgain: () => void;
   onShowScoreboard: () => void;
@@ -36,11 +39,12 @@ export interface GameScreenProps {
 export function GameScreen({
   puzzle,
   isDaily = false,
+  restore = null,
   onExit,
   onPlayAgain,
   onShowScoreboard,
 }: GameScreenProps) {
-  const game = useGameState(puzzle);
+  const game = useGameState(puzzle, { restore, isDaily });
   const [settingsOpen, setSettingsOpen] = useState(false);
   // Tamamlama tek seferlik tetiklensin (puzzle yeniden olusursa sifirlanir).
   const completedRef = useRef(false);
