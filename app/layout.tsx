@@ -24,7 +24,7 @@ const outfit = Outfit({
 // Production'da NEXT_PUBLIC_SITE_URL ile override edilebilir; yoksa makul
 // bir Vercel placeholder kullaniriz (uyariyi gidermek icin).
 const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://sudodu.vercel.app";
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://sudokuahmet.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
