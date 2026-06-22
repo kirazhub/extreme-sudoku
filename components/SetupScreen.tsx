@@ -1,16 +1,23 @@
 "use client";
 
-// Baslangic ekrani: zorluk + tahta boyutu + ipucu yogunlugu + BASLA.
+// Baslangic ekrani: Gunluk bulmaca + zorluk + tahta boyutu + ipucu yogunlugu + BASLA.
 // Saf gosterim; veri yonetimi yok, kullaniciya degerleri secip "onStart" tetikler.
 
 import { useState } from "react";
 import type { Difficulty } from "@/lib/engine";
 import { displayNameTR } from "@/lib/engine/difficulty";
+import {
+  isCompletedToday,
+  loadDailyState,
+  type DailyState,
+} from "@/lib/game/daily";
 
 export interface SetupChoice {
   size: number;
   difficulty: Difficulty;
   extraClues: number;
+  /** True ise gunluk bulmaca; tohum dailySeed() ile sabitlenir. */
+  isDaily?: boolean;
 }
 
 export interface SetupScreenProps {
@@ -28,17 +35,39 @@ const DIFFICULTIES: Difficulty[] = [
 
 const SIZES = [4, 6, 9, 16];
 
+// Gunluk bulmaca sabit parametreleri — herkeste o gun ayni deneyim.
+const DAILY_SIZE = 9;
+const DAILY_DIFFICULTY: Difficulty = "hard";
+
 export function SetupScreen({ onStart, onShowScoreboard }: SetupScreenProps) {
   const [difficulty, setDifficulty] = useState<Difficulty>("medium");
   const [size, setSize] = useState<number>(9);
   // -10..+15: sol -> daha az ipucu (zor), sag -> daha cok ipucu (kolay).
   const [extraClues, setExtraClues] = useState<number>(0);
 
+  // Gunluk seri durumu — lazy initial ile mount sirasinda localStorage'tan
+  // okuruz. SSR'da window yok -> loadDailyState null doner; istemcide gercek
+  // deger gelir. useEffect+setState pattern'i yerine bu yontem kullaniyoruz
+  // ki React 19'un set-state-in-effect kuralina takilmayalim.
+  const [daily] = useState<DailyState | null>(() => loadDailyState());
+
+  const dailyDone = isCompletedToday(daily);
+  const streak = daily?.streak ?? 0;
+
+  const startDaily = () => {
+    onStart({
+      size: DAILY_SIZE,
+      difficulty: DAILY_DIFFICULTY,
+      extraClues: 0,
+      isDaily: true,
+    });
+  };
+
   // NOT: Turkce karakterli buyuk harfli basliklar icin Tailwind'in uppercase'i
   // yerine direkt buyuk harfli kaynak metin kullaniyoruz (text-transform Turkce'de
   // "i" → "I" yapip noktasiz büyük I üretir; biz "İ" istiyoruz).
   return (
-    <div className="mx-auto flex min-h-[100dvh] w-full max-w-md flex-col gap-8 px-5 py-8">
+    <div className="mx-auto flex min-h-[100dvh] w-full max-w-md flex-col gap-7 px-5 py-8">
       <header className="pt-2 flex items-start justify-between">
         <div>
           <p className="text-ink-soft text-sm tracking-widest">
@@ -62,6 +91,61 @@ export function SetupScreen({ onStart, onShowScoreboard }: SetupScreenProps) {
           ★ Skorlar
         </button>
       </header>
+
+      {/* Gunluk bulmaca karti — tum kart tek bir buton */}
+      <section>
+        <button
+          type="button"
+          onClick={startDaily}
+          className="group w-full rounded-2xl border-2 border-accent bg-accent-soft p-4 text-left shadow-sm transition-transform active:scale-[0.99]"
+          aria-label="Günlük bulmacayı oyna"
+        >
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <div className="text-3xl">🗓️</div>
+              <div>
+                <div
+                  className="font-display text-xl font-semibold text-ink leading-tight"
+                  style={{ fontFamily: "var(--font-display), serif" }}
+                >
+                  Günlük Bulmaca
+                </div>
+                <div className="text-xs text-ink-soft mt-0.5">
+                  {DAILY_SIZE}×{DAILY_SIZE} · {displayNameTR(DAILY_DIFFICULTY)} · herkeste aynı
+                </div>
+              </div>
+            </div>
+            <div className="text-accent font-semibold">›</div>
+          </div>
+
+          <div className="mt-3 flex flex-wrap items-center gap-2 text-sm">
+            {streak > 0 && (
+              <span className="tnum rounded-full bg-accent px-2.5 py-1 text-white font-semibold">
+                🔥 {streak} günlük seri
+              </span>
+            )}
+            {dailyDone && (
+              <span className="rounded-full bg-surface border border-accent/40 px-2.5 py-1 text-accent font-medium">
+                ✓ Bugünkü tamamlandı
+              </span>
+            )}
+            {!dailyDone && streak === 0 && (
+              <span className="text-ink-soft">
+                Diziyi başlat — bugünkü bulmacayı çöz
+              </span>
+            )}
+          </div>
+        </button>
+      </section>
+
+      {/* Ayrac etiketi */}
+      <div className="flex items-center gap-3">
+        <div className="h-px flex-1 bg-grid-thin" />
+        <span className="text-xs text-ink-soft tracking-widest">
+          VEYA KENDİN SEÇ
+        </span>
+        <div className="h-px flex-1 bg-grid-thin" />
+      </div>
 
       <section className="flex flex-col gap-3">
         <label className="text-sm font-medium text-ink-soft tracking-wider">

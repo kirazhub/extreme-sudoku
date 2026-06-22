@@ -18,9 +18,16 @@ import {
   isNewRecord as scoreIsNewRecord,
   saveScore,
 } from "@/lib/game/scoreboard";
+import {
+  applyDailyCompletion,
+  loadDailyState,
+  saveDailyState,
+} from "@/lib/game/daily";
 
 export interface GameScreenProps {
   puzzle: Puzzle;
+  /** Gunluk bulmaca mi? Tamamlamada seri (streak) guncellenir. */
+  isDaily?: boolean;
   onExit: () => void;
   onPlayAgain: () => void;
   onShowScoreboard: () => void;
@@ -28,6 +35,7 @@ export interface GameScreenProps {
 
 export function GameScreen({
   puzzle,
+  isDaily = false,
   onExit,
   onPlayAgain,
   onShowScoreboard,
@@ -38,7 +46,7 @@ export function GameScreen({
   const completedRef = useRef(false);
   const [savedRecord, setSavedRecord] = useState(false);
 
-  // Tamamlama: konfeti + skor kayit + haptik.
+  // Tamamlama: konfeti + skor kayit + haptik + (gunlukse) seri guncelle.
   useEffect(() => {
     if (game.isSolved && !completedRef.current) {
       completedRef.current = true;
@@ -55,6 +63,13 @@ export function GameScreen({
         dateISO: new Date().toISOString(),
         hintsUsed: game.hintsUsed,
       });
+      // Gunluk bulmacaysa serisi guncellenir (idempotent: ayni gunde 2. kez
+      // cozme streak'i degistirmez — applyDailyCompletion ilgileniyor).
+      if (isDaily) {
+        const prev = loadDailyState();
+        const nextState = applyDailyCompletion(prev);
+        saveDailyState(nextState);
+      }
       vibrateSuccess();
     }
     if (!game.isSolved) {
@@ -111,6 +126,7 @@ export function GameScreen({
 
         <div className="flex flex-col items-center">
           <p className="text-xs tracking-widest text-ink-soft">
+            {isDaily ? "🗓️ GÜNLÜK · " : ""}
             {displayNameTR(puzzle.difficulty)} · {puzzle.config.size}×
             {puzzle.config.size}
           </p>

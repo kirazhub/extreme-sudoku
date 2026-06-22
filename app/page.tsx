@@ -3,19 +3,33 @@
 // Tek sayfa app — faz: 'setup' | 'playing' | 'scoreboard'. Faz secimi React state ile.
 
 import { useState, useCallback } from "react";
-import { newPuzzle, type Puzzle, type Difficulty } from "@/lib/engine";
+import {
+  dailySeed,
+  newPuzzle,
+  type Puzzle,
+  type Difficulty,
+} from "@/lib/engine";
 import { SetupScreen, type SetupChoice } from "@/components/SetupScreen";
 import { GameScreen } from "@/components/GameScreen";
 import { ScoreboardScreen } from "@/components/ScoreboardScreen";
 
 type Phase =
   | { kind: "setup" }
-  | { kind: "playing"; puzzle: Puzzle; choice: SetupChoice }
+  | {
+      kind: "playing";
+      puzzle: Puzzle;
+      choice: SetupChoice;
+      isDaily: boolean;
+    }
   | { kind: "scoreboard"; from: "setup" | "playing"; lastChoice?: SetupChoice };
 
-// Yardimci: secimden yeni puzzle uretir (taze tohumla).
+// Yardimci: secimden yeni puzzle uretir.
+// Gunluk bulmaca icin dailySeed() (tarihe bagli sabit tohum) kullanilir;
+// herkeste o gun ayni bulmaca uretilsin diye.
 function buildPuzzle(choice: SetupChoice): Puzzle {
-  const seed = (Date.now() ^ Math.floor(Math.random() * 0xffffffff)) >>> 0;
+  const seed = choice.isDaily
+    ? dailySeed()
+    : (Date.now() ^ Math.floor(Math.random() * 0xffffffff)) >>> 0;
   return newPuzzle({
     size: choice.size,
     difficulty: choice.difficulty as Difficulty,
@@ -28,7 +42,12 @@ export default function Home() {
   const [phase, setPhase] = useState<Phase>({ kind: "setup" });
 
   const handleStart = useCallback((choice: SetupChoice) => {
-    setPhase({ kind: "playing", puzzle: buildPuzzle(choice), choice });
+    setPhase({
+      kind: "playing",
+      puzzle: buildPuzzle(choice),
+      choice,
+      isDaily: !!choice.isDaily,
+    });
   }, []);
 
   const handleExit = useCallback(() => {
@@ -38,8 +57,16 @@ export default function Home() {
   const handlePlayAgain = useCallback(() => {
     setPhase((p) => {
       if (p.kind !== "playing") return p;
-      // Aynı zorluk + boyut + ipucu yogunlugu ile yeni bulmaca.
-      return { kind: "playing", puzzle: buildPuzzle(p.choice), choice: p.choice };
+      // Gunluk bulmacayi "tekrar oyna" derken normal moda geciyoruz —
+      // aksi halde ayni bulmacayi tekrar acmis oluruz; daha anlamlisi
+      // ayni zorluk/boyutta taze bir bulmaca uretmek.
+      const nextChoice: SetupChoice = { ...p.choice, isDaily: false };
+      return {
+        kind: "playing",
+        puzzle: buildPuzzle(nextChoice),
+        choice: nextChoice,
+        isDaily: false,
+      };
     });
   }, []);
 
@@ -77,6 +104,7 @@ export default function Home() {
   return (
     <GameScreen
       puzzle={phase.puzzle}
+      isDaily={phase.isDaily}
       onExit={handleExit}
       onPlayAgain={handlePlayAgain}
       onShowScoreboard={handleShowScoreboard}

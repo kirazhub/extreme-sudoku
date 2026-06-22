@@ -1,7 +1,9 @@
 "use client";
 
-// Küçük ayar sayfası (modal). Şimdilik sadece "Hata göster" var.
+// Küçük ayar sayfası (modal). Hata gösterme ve tema (acik/koyu) toggle.
 // Karta dokununca arka plan kapatır. Yumusak fade ile acilir.
+
+import { useTheme } from "@/lib/game/useTheme";
 
 export interface SettingsSheetProps {
   open: boolean;
@@ -16,6 +18,8 @@ export function SettingsSheet({
   onToggleShowErrors,
   onClose,
 }: SettingsSheetProps) {
+  const { isDark, toggle: toggleTheme } = useTheme();
+
   if (!open) return null;
   return (
     <div
@@ -37,6 +41,20 @@ export function SettingsSheet({
         </h2>
 
         <div className="mt-4 flex flex-col gap-2">
+          {/* Tema toggle */}
+          <label className="flex items-center justify-between rounded-xl bg-bg p-3 active:bg-accent-soft cursor-pointer">
+            <div className="flex flex-col">
+              <span className="text-base font-medium text-ink">
+                {isDark ? "🌙 Koyu tema" : "☀️ Açık tema"}
+              </span>
+              <span className="text-xs text-ink-soft">
+                Açık ve koyu arasında geçiş yapar.
+              </span>
+            </div>
+            <Toggle on={isDark} onChange={toggleTheme} />
+          </label>
+
+          {/* Hata gosterme toggle */}
           <label className="flex items-center justify-between rounded-xl bg-bg p-3 active:bg-accent-soft cursor-pointer">
             <div className="flex flex-col">
               <span className="text-base font-medium text-ink">
