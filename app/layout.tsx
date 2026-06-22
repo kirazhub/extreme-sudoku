@@ -3,9 +3,10 @@ import { Fraunces, Outfit } from "next/font/google";
 import "./globals.css";
 
 // Marka/baslik fontu: Fraunces — karakterli serif display
+// latin-ext subset Turkce karakterleri (İ, Ğ, Ş vb.) icerir.
 const fraunces = Fraunces({
   variable: "--font-fraunces",
-  subsets: ["latin"],
+  subsets: ["latin", "latin-ext"],
   display: "swap",
   weight: ["500", "600", "700"],
 });
@@ -13,14 +14,14 @@ const fraunces = Fraunces({
 // Arayuz + rakamlar: Outfit — geometrik sans, tnum acik
 const outfit = Outfit({
   variable: "--font-outfit",
-  subsets: ["latin"],
+  subsets: ["latin", "latin-ext"],
   display: "swap",
   weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
   title: "Extreme Sudoku",
-  description: "Telefonda oyna: kolaydan imkansiza Sudoku.",
+  description: "Telefonda oyna: kolaydan imkânsıza Sudoku.",
 };
 
 // Mobil oncelikli viewport: 100dvh duzgun calissin, zoom kapali.

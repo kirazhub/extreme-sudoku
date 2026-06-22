@@ -15,7 +15,7 @@ export function displayNameTR(d: Difficulty): string {
     case "extreme":
       return "Extreme";
     case "impossible":
-      return "Imkansiz";
+      return "İmkânsız";
   }
 }
 
