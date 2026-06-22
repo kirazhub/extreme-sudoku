@@ -1,8 +1,7 @@
 "use client";
 
 // Sudoku tahtasi: N x N grid + kutu sinirlarinda kalin ayrac cizgileri.
-// Yaklasim: dis arka plan grid-thick rengi, hucreler arasi 1px bosluk;
-// kutu sinirlarinda 2px bosluk vererek kalin cizgi etkisi olusturulur.
+// Notlari ve hata vurgusunu CellView'e iletir.
 
 import { CellView } from "./CellView";
 import type { GameConfig } from "@/lib/engine";
@@ -14,6 +13,12 @@ export interface BoardViewProps {
   board: number[];
   /** Givens dizisi (kilitli hucreler tespiti). */
   givens: number[];
+  /** Cozum — hata kontrolu icin. */
+  solution: number[];
+  /** Hata vurgulamasi acik mi? */
+  showErrors: boolean;
+  /** Hucre -> notlar. */
+  notesMap: Record<number, number[]>;
   selectedIndex: number;
   onSelect: (index: number) => void;
 }
@@ -22,6 +27,9 @@ export function BoardView({
   config,
   board,
   givens,
+  solution,
+  showErrors,
+  notesMap,
   selectedIndex,
   onSelect,
 }: BoardViewProps) {
@@ -43,7 +51,6 @@ export function BoardView({
         style={{
           gridTemplateColumns: `repeat(${size}, minmax(0, 1fr))`,
           gridTemplateRows: `repeat(${size}, minmax(0, 1fr))`,
-          // Hucreler arasi varsayilan boslugu 0 yapip kenarliklarla cizgi cizecegiz.
           gap: 0,
         }}
       >
@@ -51,7 +58,6 @@ export function BoardView({
           const row = Math.floor(i / size);
           const col = i % size;
 
-          // Her hucrenin sag ve alt kenarliklari: kutu sinirinda kalin.
           const thickRight =
             col !== size - 1 && (col + 1) % boxCols === 0;
           const thickBottom =
@@ -70,11 +76,19 @@ export function BoardView({
               : "var(--color-grid-thin)",
           };
 
+          const isGivenCell = givens[i] !== 0;
+          // Hata: oyuncu girisi (given degil), deger var ve solution ile ortusmuyor.
+          const isError =
+            showErrors &&
+            !isGivenCell &&
+            value !== 0 &&
+            value !== solution[i];
+
           return (
             <div key={i} style={borderStyle} className="relative">
               <CellView
                 value={value}
-                isGiven={givens[i] !== 0}
+                isGiven={isGivenCell}
                 isSelected={selectedIndex === i}
                 isPeer={peers.has(i)}
                 isSameValue={
@@ -82,6 +96,8 @@ export function BoardView({
                   selectedValue !== 0 &&
                   value === selectedValue
                 }
+                notes={notesMap[i]}
+                isError={isError}
                 size={size}
                 onSelect={() => onSelect(i)}
               />

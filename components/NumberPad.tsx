@@ -1,6 +1,7 @@
 "use client";
 
-// Alt kisimdaki rakam paleti. 1..size butonlari + Sil.
+// Alt kisimdaki rakam paleti. 1..size butonlari.
+// Not modu aktifken paletin etrafinda accent cerceve gosterilir.
 
 import { symbolFor, valuesForSize } from "@/lib/game/symbols";
 
@@ -8,20 +9,24 @@ export interface NumberPadProps {
   size: number;
   /** Bir rakam basildiginda. */
   onInput: (value: number) => void;
-  /** Sil butonu basildiginda. */
-  onErase: () => void;
   /** Buton devre disi olsun mu? (hicbir hucre secili degilken). */
   disabled?: boolean;
+  /** Not modu aktifse paleti gorsel olarak farklilastir. */
+  noteMode?: boolean;
 }
 
-export function NumberPad({ size, onInput, onErase, disabled }: NumberPadProps) {
+export function NumberPad({ size, onInput, disabled, noteMode }: NumberPadProps) {
   const values = valuesForSize(size);
 
   // 16x16 icin 2 satira sar; digerleri tek satir.
   const cols = size <= 9 ? size : 8;
 
   return (
-    <div className="w-full">
+    <div
+      className={`w-full rounded-2xl p-1 transition-colors ${
+        noteMode ? "ring-2 ring-accent/60 bg-accent-soft/40" : ""
+      }`}
+    >
       <div
         className="grid gap-1.5"
         style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}
@@ -39,14 +44,6 @@ export function NumberPad({ size, onInput, onErase, disabled }: NumberPadProps) 
           </button>
         ))}
       </div>
-      <button
-        type="button"
-        disabled={disabled}
-        onClick={onErase}
-        className="mt-2 h-11 w-full rounded-xl bg-surface text-ink-soft font-medium border border-grid-thin transition-colors active:bg-accent-soft disabled:opacity-40"
-      >
-        Sil
-      </button>
     </div>
   );
 }
