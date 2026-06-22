@@ -7,8 +7,8 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Extreme Sudoku",
-    short_name: "Sudoku",
+    name: "Sudoku Ahmet",
+    short_name: "Sudoku Ahmet",
     description:
       "Telefonda oyna: kolaydan imkansiza Sudoku. Gunluk bulmaca ve seri takibiyle.",
     start_url: "/",

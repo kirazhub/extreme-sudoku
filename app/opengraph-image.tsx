@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 // 1200x630 — Facebook/Twitter/LinkedIn paylasiminda kullanilan standart oran.
-export const alt = "Extreme Sudoku — Telefonda oyna, saf mantık";
+export const alt = "Sudoku Ahmet — Telefonda oyna, saf mantık";
 export const size = {
   width: 1200,
   height: 630,
@@ -155,7 +155,7 @@ export default function OpenGraphImage() {
                 display: "flex",
               }}
             />
-            Extreme
+            MOBİL SUDOKU
           </div>
 
           {/* Ana baslik: buyuk serif, karakterli */}
@@ -172,6 +172,7 @@ export default function OpenGraphImage() {
             }}
           >
             <span>Sudoku</span>
+            <span style={{ color: CORAL }}>Ahmet</span>
           </div>
 
           {/* Alt baslik: tagline */}

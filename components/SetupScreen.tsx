@@ -6,6 +6,7 @@
 import { useState } from "react";
 import type { Difficulty } from "@/lib/engine";
 import { displayNameTR } from "@/lib/engine/difficulty";
+import { useTheme } from "@/lib/game/useTheme";
 import {
   isCompletedToday,
   loadDailyState,
@@ -45,6 +46,9 @@ export function SetupScreen({ onStart, onShowScoreboard }: SetupScreenProps) {
   // -10..+15: sol -> daha az ipucu (zor), sag -> daha cok ipucu (kolay).
   const [extraClues, setExtraClues] = useState<number>(0);
 
+  // Acik/koyu tema gecisi — ana ekrandan da erisilebilir.
+  const { isDark, toggle: toggleTheme } = useTheme();
+
   // Gunluk seri durumu — lazy initial ile mount sirasinda localStorage'tan
   // okuruz. SSR'da window yok -> loadDailyState null doner; istemcide gercek
   // deger gelir. useEffect+setState pattern'i yerine bu yontem kullaniyoruz
@@ -77,19 +81,30 @@ export function SetupScreen({ onStart, onShowScoreboard }: SetupScreenProps) {
             className="font-display text-5xl font-semibold leading-tight tracking-tight text-ink"
             style={{ fontFamily: "var(--font-display), serif" }}
           >
-            Extreme
+            Sudoku
             <br />
-            <span className="text-accent">Sudoku</span>
+            <span className="text-accent">Ahmet</span>
           </h1>
         </div>
-        <button
-          type="button"
-          onClick={onShowScoreboard}
-          className="rounded-lg border border-grid-thin bg-surface px-3 py-1.5 text-sm text-ink-soft active:bg-accent-soft"
-          aria-label="Skorboard"
-        >
-          ★ Skorlar
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className="rounded-lg border border-grid-thin bg-surface px-3 py-1.5 text-base active:bg-accent-soft"
+            aria-label={isDark ? "Açık temaya geç" : "Koyu temaya geç"}
+            title={isDark ? "Açık tema" : "Koyu tema"}
+          >
+            {isDark ? "☀️" : "🌙"}
+          </button>
+          <button
+            type="button"
+            onClick={onShowScoreboard}
+            className="rounded-lg border border-grid-thin bg-surface px-3 py-1.5 text-sm text-ink-soft active:bg-accent-soft"
+            aria-label="Skorboard"
+          >
+            ★ Skorlar
+          </button>
+        </div>
       </header>
 
       {/* Gunluk bulmaca karti — tum kart tek bir buton */}

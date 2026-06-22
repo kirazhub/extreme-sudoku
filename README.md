@@ -1,4 +1,4 @@
-# 🧩 Extreme Sudoku
+# 🧩 Sudoku Ahmet
 
 Mobil-öncelikli, modern bir web Sudoku oyunu — **4×4'ten 16×16'ya** kadar tahta boyutları, insan tekniklerine dayalı akıllı ipuçları ve _İmkânsız_ seviyeye kadar 5 farklı zorluk. Tamamen TypeScript ile yazılmış, tek çözüm garantili bir motor üzerinde çalışır.
 
