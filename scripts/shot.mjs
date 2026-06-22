@@ -2,31 +2,34 @@ import { chromium } from 'playwright';
 
 const base = 'http://localhost:3000';
 const browser = await chromium.launch();
-const page = await browser.newPage({
-  viewport: { width: 390, height: 844 },
-  deviceScaleFactor: 2,
-});
 
+// 1) Açık tema — güncel setup (günlük bulmaca kartı dahil)
+const page = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2 });
 await page.goto(base, { waitUntil: 'networkidle' });
 await page.waitForTimeout(900);
-await page.screenshot({ path: 'docs/superpowers/web-setup.png' });
-console.log('web-setup.png alindi');
-
-// "BAŞLA" benzeri butonu bul ve tıkla (büyük/küçük harf duyarsız)
-const startBtn = page.getByRole('button', { name: /ba[sş]la/i });
-if (await startBtn.count()) {
-  await startBtn.first().click();
-  await page.waitForTimeout(1200);
-  await page.screenshot({ path: 'docs/superpowers/web-game.png' });
-  console.log('web-game.png alindi');
-
-  // Bir kareye ve bir rakama dokunup giris test et (gorsel)
-  try {
-    await page.waitForTimeout(300);
-    await page.screenshot({ path: 'docs/superpowers/web-game2.png' });
-  } catch (e) { console.log('ek adim atlandi:', e.message); }
-} else {
-  console.log('BASLA butonu bulunamadi — setup ekrani selektorleri farkli olabilir');
-}
+await page.screenshot({ path: 'docs/superpowers/web-setup-v2.png', fullPage: true });
+console.log('web-setup-v2.png alindi');
 
 await browser.close();
+
+// 2) Koyu tema — localStorage'a dark yazıp yeniden yükle
+const b2 = await chromium.launch();
+const ctx = await b2.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2 });
+await ctx.addInitScript(() => {
+  try { localStorage.setItem('extreme-sudoku-theme', 'dark'); } catch (e) {}
+});
+const p2 = await ctx.newPage();
+await p2.goto(base, { waitUntil: 'networkidle' });
+await p2.waitForTimeout(900);
+await p2.screenshot({ path: 'docs/superpowers/web-setup-dark.png', fullPage: true });
+console.log('web-setup-dark.png alindi');
+
+// Koyu temada bir oyun baslat
+const startBtn = p2.getByRole('button', { name: /ba[sş]la/i });
+if (await startBtn.count()) {
+  await startBtn.first().click();
+  await p2.waitForTimeout(1200);
+  await p2.screenshot({ path: 'docs/superpowers/web-game-dark.png' });
+  console.log('web-game-dark.png alindi');
+}
+await b2.close();
