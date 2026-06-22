@@ -3,10 +3,12 @@
 
 import { describe, expect, it } from "vitest";
 import {
+  clearNotesAt,
   formatTime,
   isBoardFull,
   isGiven,
   placeValue,
+  toggleNote,
 } from "../useGameState";
 import type { Puzzle } from "@/lib/engine";
 
@@ -90,5 +92,37 @@ describe("formatTime", () => {
   });
   it("3600 saniye -> 60:00", () => {
     expect(formatTime(3600)).toBe("60:00");
+  });
+});
+
+describe("toggleNote", () => {
+  it("yoksa ekler", () => {
+    const next = toggleNote({}, 5, 3);
+    expect(next).toEqual({ 5: [3] });
+  });
+  it("varsa cikartir", () => {
+    const next = toggleNote({ 5: [3] }, 5, 3);
+    expect(next).toEqual({});
+  });
+  it("birden fazla not", () => {
+    let n = toggleNote({}, 0, 5);
+    n = toggleNote(n, 0, 2);
+    n = toggleNote(n, 0, 8);
+    expect(n[0]).toEqual([2, 5, 8]); // sirali
+  });
+  it("immutable: orijinali degistirmez", () => {
+    const orig = { 5: [3] };
+    toggleNote(orig, 5, 7);
+    expect(orig).toEqual({ 5: [3] });
+  });
+});
+
+describe("clearNotesAt", () => {
+  it("bir hucredeki notlari siler", () => {
+    expect(clearNotesAt({ 1: [2, 3], 2: [4] }, 1)).toEqual({ 2: [4] });
+  });
+  it("not yoksa ayni nesneyi doner", () => {
+    const orig = { 1: [2] };
+    expect(clearNotesAt(orig, 99)).toBe(orig);
   });
 });
