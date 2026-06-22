@@ -5,6 +5,8 @@ import {
   configForSize,
   isSolved,
   dailySeed,
+  solveLogically,
+  rateDifficulty,
 } from "../index";
 import { createEmpty } from "../board";
 
@@ -44,5 +46,20 @@ describe("public API (index)", () => {
     const a = dailySeed(new Date("2026-05-15T00:00:00Z"));
     const b = dailySeed(new Date("2026-05-16T00:00:00Z"));
     expect(a).not.toBe(b);
+  });
+
+  it("solveLogically public API'den erisilebilir", () => {
+    const c = configForSize(4);
+    const empty = createEmpty(c);
+    const r = solveLogically(empty, c);
+    expect(typeof r.solved).toBe("boolean");
+    expect(typeof r.steps).toBe("number");
+    expect(typeof r.hardestTechnique).toBe("string");
+  });
+
+  it("rateDifficulty public API'den erisilebilir", () => {
+    const p = newPuzzle({ size: 4, difficulty: "easy", seed: 42 });
+    const d = rateDifficulty(p.givens, p.config);
+    expect(["easy", "medium", "hard", "extreme", "impossible"]).toContain(d);
   });
 });

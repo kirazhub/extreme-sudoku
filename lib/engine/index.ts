@@ -4,17 +4,25 @@
 import type { GameConfig, Grid, Hint, Puzzle, Difficulty } from "./types";
 import { configForSize as _configForSize } from "./geometry";
 import { canPlace as _canPlace } from "./validator";
-import { nextHint } from "./logicalSolver";
+import { nextHint, solveLogically as _solveLogically } from "./logicalSolver";
+import type { LogicalSolveResult } from "./logicalSolver";
 import { makePuzzle } from "./generator";
+import { rateDifficulty as _rateDifficulty } from "./difficulty";
 
 // Tipleri yeniden dis ariza et.
-export type { GameConfig, Grid, Hint, Puzzle, Difficulty };
+export type { GameConfig, Grid, Hint, Puzzle, Difficulty, LogicalSolveResult };
 
 /** Boyut icin geometri config'i. (Bkz. geometry.configForSize) */
 export const configForSize = _configForSize;
 
 /** Bir degerin hucreye konulup konulamayacagini soyler. (Bkz. validator.canPlace) */
 export const canPlace = _canPlace;
+
+/** Backtracking'siz mantiksal cozucu. */
+export const solveLogically = _solveLogically;
+
+/** Mantiksal cozucu temelli, gercek teknik zorluk derecelendirmesi. */
+export const rateDifficulty = _rateDifficulty;
 
 export interface NewPuzzleOpts {
   /** Tahta boyutu: 4, 6, 9 veya 16. */

@@ -1,4 +1,5 @@
-import type { Difficulty, GameConfig } from "./types";
+import type { Difficulty, GameConfig, Grid } from "./types";
+import { solveLogically } from "./logicalSolver";
 
 // Zorluk seviyesi ile boyut basina kac ipucu (clue) birakilacagini hesaplar.
 // Asagidaki sayilar deneyimsel: extreme/impossible cok az ipucu birakir.
@@ -69,5 +70,47 @@ function minClues(config: GameConfig): number {
       return 55;
     default:
       return Math.floor((config.size * config.size) / 4);
+  }
+}
+
+/**
+ * Bir bulmacanin gercek zorlugunu, mantiksal cozucuyu kullanarak derecelendirir.
+ * Asla tahmin/backtracking yapmaz; sadece insan tekniklerine bakar.
+ * - Hic ipucu gerekmiyor / sadece nakedSingle  -> easy
+ * - hiddenSingle gerekti                       -> medium
+ * - pair / pointing / box-line gerekti         -> hard
+ * - nakedTriple / xWing gerekti                -> extreme
+ * - Mantiksal olarak cozulemiyorsa             -> impossible
+ *
+ * Not: targetClues fonksiyonu uretici tarafindan kullanilmaya devam eder;
+ * rateDifficulty ise uretilen bulmacanin gercekten ne kadar zor oldugunu
+ * raporlamak (ve testlerde dogrulamak) icindir.
+ */
+export function rateDifficulty(
+  givens: Grid,
+  config: GameConfig
+): Difficulty {
+  const r = solveLogically(givens, config);
+  if (!r.solved) return "impossible";
+
+  switch (r.hardestTechnique) {
+    case "":
+      // Hicbir teknik bile gerekmemis (zaten tam dolu girilmis). Easy say.
+      return "easy";
+    case "nakedSingle":
+      return "easy";
+    case "hiddenSingle":
+      return "medium";
+    case "nakedPair":
+    case "hiddenPair":
+    case "pointingPair":
+    case "boxLineReduction":
+      return "hard";
+    case "nakedTriple":
+    case "xWing":
+      return "extreme";
+    default:
+      // Bilinmeyen teknik ileride eklenirse, en azindan hard varsay.
+      return "hard";
   }
 }
